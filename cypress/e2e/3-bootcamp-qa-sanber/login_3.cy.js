@@ -1,23 +1,27 @@
 describe('User login dengan password salah', () => {
 
     it('Buka halaman login', () => {
-       cy.visit('https://opensource-demo.orangehrmlive.com');
+    //    cy.visit('https://opensource-demo.orangehrmlive.com');
+        loginPage.visit();
     });
     it('Masukan username valid', () => {
-        cy.get('[name="username"]').type('Admin');         
+        // cy.get('[name="username"]').type('Admin'); 
+        loginPage.inputUsername('Admin');
     });
     it('Masukan password salah', () => {
-        cy.get('[name="password"]').type('123456');
+        // cy.get('[name="password"]').type('123456');
+        loginPage.inputPassword('123456');
     });
     it('Klik login', () => {
         cy.intercept('POST', '**/auth/validate').as('loginRequest');
-        cy.get('//*[@id="app"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[3]/button').click();
+        // cy.get('//*[@id="app"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[3]/button').click();
+        loginPage.clickBtnLogin();
         cy.wait('@loginRequest').then((interception) => {
             expect(interception.response.statusCode).to.eq(302);
         });
     });
     it('Muncul pesan error "Invalid credentials"', () => {
-        cy.get('//*[@id="app"]/div[1]/div/div[1]/div/div[2]/div[2]/div/div[1]/div[1]/p').should('have.text', 'Invalid Credentials');
-        
+        // cy.get('//*[@id="app"]/div[1]/div/div[1]/div/div[2]/div[2]/div/div[1]/div[1]/p').should('have.text', 'Invalid Credentials');
+        loginPage.isInvalidCredentialDisplayed();
     });
 })
