@@ -2,15 +2,16 @@ class LoginPage {
     //locator
     fieldUsername = '[name="username"]';
     fieldPassword = '[name="password"]';
-    btnLogin = '//*[@id="app"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[3]/button';
-    txtDashboard = '//*[@id="app"]/div[1]/div[1]/header/div[1]/div[1]/span/h6';
-    txtInvalidCredential = '//*[@id="app"]/div[1]/div/div[1]/div/div[2]/div[2]/div/div[1]/div[1]/p';
+    btnLogin = '.oxd-button';
+    txtDashboard = 'oxd-text oxd-text--p oxd-alert-content-text';
+    txtInvalidCredential = '.oxd-alert-content > .oxd-text';
     txtRequiredUsername = '//*[@id="app"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[1]/div/span';
     txtRequiredPassword = '//*[@id="app"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[2]/div/span';
+    txtForgotPassword = '.orangehrm-login-forgot > .oxd-text';
 
     //method
-    visitWeb(){
-       cy.visit('https://opensource-demo.orangehrmlive.com');
+    visit(){
+       cy.visit('https://opensource-demo.orangehrmlive.com/'); //ini methodnya untuk visit link
     }
 
     inputUsername(username){
@@ -26,11 +27,12 @@ class LoginPage {
     }
 
     isDashboardDisplayed(){
-        cy.get(this.txtDashboard).should('have.text', 'Dashboard');
+        // cy.get(this.txtDashboard).should('have.text', 'Dashboard');
+        cy.url().should('eq', 'https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index');
     }
 
     isInvalidCredentialDisplayed(){
-        cy.get(this.txtInvalidCredential).should('have.text', 'Invalid Credentials');
+        cy.get(this.txtInvalidCredential).should('have.text', 'Invalid credentials');
     }
 
     isTxtRequiredUsernameDisplayed(){
@@ -41,4 +43,10 @@ class LoginPage {
         cy.get(this.txtRequiredPassword).should('have.text', 'Required');
     }
 
+    clickBtnForgotPassword(){
+        cy.get(this.txtForgotPassword).click();
+    }
+
 }
+
+export default LoginPage;

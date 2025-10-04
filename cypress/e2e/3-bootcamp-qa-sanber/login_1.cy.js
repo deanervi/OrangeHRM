@@ -1,29 +1,34 @@
-import LoginPage from '../support/pageObjects/LoginPage';
+import LoginPage from "../../support/pageObjects/loginPage";
 
 describe('User Login dengan Password dan Username Valid', () => {
     const loginPage = new LoginPage();
 
-    it('Buka halaman login', () => {
-    //    cy.visit('https://opensource-demo.orangehrmlive.com');
-        loginPage.visit();
+    before(() => {                                   //di before ini adalah function untuk reset session
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.window().then((win) => {
+            win.sessionStorage.clear()
+        })
+
+        // --------------------------- //
+        loginPage.visit(); //ini function untuk buka link orangeHRM
     });
+    
     it('Masukan username valid', () => {
-        // cy.get('[name="username"]').type('Admin');      
-        loginPage.inputUsername('Admin');
+        loginPage.inputUsername('Admin');  //ini untuk input username
     });
+    
     it('Masukan password valid', () => {
-        // cy.get('[name="password"]').type('admin123');
-        loginPage.inputPassword('admin123');
+        loginPage.inputPassword('admin123'); //ini untuk input password
     });
     it('Klik login', () => {
-        cy.intercept('POST', '**/auth/validate').as('loginRequest');
-        // cy.get('//*[@id="app"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[3]/button').click();
-        loginPage.clickBtnLogin();
+        cy.intercept('POST', '**/auth/validate').as('loginRequest'); //ini untuk kirim request 
+        loginPage.clickBtnLogin(); //ini untuk klik button login
 
-        cy.wait('@loginRequest').its('response.statusCode').should('eq', 200);
+        cy.wait('@loginRequest').its('response.statusCode').should('eq', 302); //ini untuk validasi response
     });
     it('User diarahkan ke halaman Dashboard', () => {
-        // cy.get('//*[@id="app"]/div[1]/div[1]/header/div[1]/div[1]/span/h6').should('have.text', 'Dashboard');
-        loginPage.isDashboardDisplayed();
+        cy.url().should('eq', 'https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index'); //ini untuk cek apakah halaman dashboard tampil
     });
+
 })
